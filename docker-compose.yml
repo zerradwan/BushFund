@@ -1,0 +1,15 @@
+# BushFund MVP - Postgres only (backend runs locally with ts-node)
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: bushfund
+      POSTGRES_DB: bushfund
+      POSTGRES_PASSWORD: bushfund
+    ports:
+      - "5432:5432"
+    volumes:
+      - bushfund_pgdata:/var/lib/postgresql/data
+
+volumes:
+  bushfund_pgdata:

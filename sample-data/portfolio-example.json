@@ -1,0 +1,15 @@
+{
+  "name": "Sample Portfolio (10 tickers)",
+  "positions": [
+    { "ticker": "AAPL", "qty": 100, "price": 185.50 },
+    { "ticker": "MSFT", "qty": 45, "price": 415.20 },
+    { "ticker": "GOOGL", "qty": 80, "price": 142.30 },
+    { "ticker": "JPM", "qty": 120, "price": 198.00 },
+    { "ticker": "JNJ", "qty": 65, "price": 158.40 },
+    { "ticker": "WMT", "qty": 90, "price": 168.20 },
+    { "ticker": "XOM", "qty": 150, "price": 108.50 },
+    { "ticker": "BAC", "qty": 250, "price": 35.60 },
+    { "ticker": "NVDA", "qty": 30, "price": 875.00 },
+    { "ticker": "UNH", "qty": 25, "price": 525.00 }
+  ]
+}
