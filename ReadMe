@@ -1,0 +1,57 @@
+# BushFund
+
+BushFund is a web application that analyzes a stock portfolio and suggests relevant prediction market contracts (Polymarket and Kalshi) as potential hedges. It maps portfolio exposure to macro and event-driven risks, recommends hedge sizing, and simulates outcomes to improve diversification.
+
+---
+
+## Overview
+
+Traditional diversification focuses on asset classes. BushFund goes further by identifying **event risk** embedded in a portfolio — such as recessions, interest rate changes, elections, or sector-specific shocks — and matching those exposures with prediction market contracts that may offset downside risk.
+
+The goal: turn uncertainty into structured hedge opportunities.
+
+---
+
+## Core Features
+
+### Portfolio Input
+- Manual ticker entry
+- CSV upload (MVP)
+- Future: brokerage integrations (e.g., Plaid)
+
+### Exposure Analysis
+- Sector concentration
+- Market beta estimation
+- Macro sensitivity (rates, recession, elections)
+- Thematic risk mapping
+
+### Hedge Discovery
+- Queries Polymarket and Kalshi markets
+- Scores contracts by relevance, liquidity, expiry, and cost
+- Ranks potential hedge candidates
+
+### Sizing & Simulation
+- Suggested contract sizing
+- Scenario modeling (event happens vs. does not happen)
+- Portfolio P&L impact visualization
+
+---
+
+## Architecture (MVP)
+
+### Frontend
+- React + TypeScript
+- Tailwind CSS
+
+### Backend
+- Node.js + Express (or FastAPI)
+- Market data connectors (Polymarket + Kalshi APIs)
+
+### Data
+- PostgreSQL (positions + exposure data)
+- Encrypted storage for API keys (if enabled)
+
+---
+
+## Project Structure (Example)
+
