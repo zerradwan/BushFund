@@ -1,0 +1,15 @@
+{
+  "name": "bushfund",
+  "private": true,
+  "description": "BushFund MVP – portfolio exposure and hedge suggestions",
+  "scripts": {
+    "demo": "concurrently -n backend,frontend -c blue,green \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:backend:memory": "cd backend && USE_MEMORY_DB=1 npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "start": "concurrently -n backend,frontend -c blue,green \"npm run dev:backend:memory\" \"npm run dev:frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

@@ -4,7 +4,7 @@
 
 import { Router, Request, Response } from 'express';
 import multer from 'multer';
-import { createPortfolio, getPortfolio, getHoldings, getExposuresForPortfolio, getLastSuggestions, deleteSuggestionsForPortfolio, saveSuggestions } from '../db/portfolioRepository';
+import { createPortfolio, getPortfolio, getHoldings, getExposuresForPortfolio, getLastSuggestions, deleteSuggestionsForPortfolio, saveSuggestions } from '../db/store';
 import { getRankedSuggestions } from '../engines/hedgeScoring';
 import type { PortfolioPayload, Position } from '../types';
 
@@ -42,9 +42,11 @@ router.post('/', upload.single('csv'), async (req: Request, res: Response) => {
       name = (req.body.name as string) || 'Uploaded portfolio';
       positions = parseCsv(req.file.buffer);
     } else {
-      const body = req.body as PortfolioPayload;
+      const body = (req.body || {}) as PortfolioPayload;
       if (!body.name || !Array.isArray(body.positions)) {
-        return res.status(400).json({ error: 'Expected { name, positions } or multipart csv with ticker,qty,price' });
+        return res.status(400).json({
+          error: 'Expected JSON: { name: string, positions: [{ ticker, qty, price }] } or multipart CSV with ticker,qty,price',
+        });
       }
       name = body.name;
       positions = body.positions;
@@ -61,7 +63,16 @@ router.post('/', upload.single('csv'), async (req: Request, res: Response) => {
     });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: 'Failed to create portfolio' });
+    const message = e instanceof Error ? e.message : 'Failed to create portfolio';
+    const isDbError =
+      message.toLowerCase().includes('connect') ||
+      message.toLowerCase().includes('ECONNREFUSED') ||
+      message.toLowerCase().includes('timeout') ||
+      message.toLowerCase().includes('password');
+    const hint = isDbError
+      ? ' Database not available. Run the backend without Postgres: from project root run "npm run start" (uses in-memory storage), or in backend folder run "USE_MEMORY_DB=1 npm run dev".'
+      : '';
+    res.status(500).json({ error: `Failed to create portfolio.${hint}` });
   }
 });
 

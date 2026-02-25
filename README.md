@@ -16,6 +16,21 @@ BushFund analyzes portfolio exposure and suggests prediction-market hedges (mock
 - **Database**: PostgreSQL
 - **Testing**: Jest (unit + API tests)
 
+## Run the demo
+
+**One command (starts Postgres if Docker is available, then backend + frontend):**
+
+```bash
+npm install
+./run-demo.sh
+```
+
+Then open **http://localhost:3000** → enter a few positions or upload `sample-data/portfolio-example.csv` → **Create portfolio & view results** → **Run hedge analysis**.
+
+**No Docker?** See **[SETUP-NO-DOCKER.md](SETUP-NO-DOCKER.md)** for installing Postgres with Homebrew and running the migration.
+
+---
+
 ## Quick start
 
 ### 1. Database

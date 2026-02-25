@@ -30,24 +30,42 @@ export function InputView({ onCreated }: InputViewProps) {
     try {
       if (useCsv && csvFile) {
         const res = await createPortfolioCsv(name || 'CSV portfolio', csvFile);
-        onCreated(res.id);
+        onCreated(Number(res.id));
       } else {
         const valid = positions.filter((p) => p.ticker.trim() && p.qty > 0 && p.price >= 0);
         if (valid.length === 0) {
           setError('Add at least one position (ticker, qty, price).');
+          setLoading(false);
           return;
         }
         const res = await createPortfolioJson({
           name: name || 'My portfolio',
           positions: valid.map((p) => ({ ticker: p.ticker.trim(), qty: p.qty, price: p.price })),
         });
-        onCreated(res.id);
+        onCreated(Number(res.id));
       }
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to create portfolio');
+      let msg = e instanceof Error ? e.message : 'Failed to create portfolio';
+      if (msg === 'Failed to fetch' || msg.includes('NetworkError')) {
+        msg += ' — Is the backend running? From the project root run: npm run start';
+      } else if (!msg.includes('USE_MEMORY_DB') && !msg.includes('npm run start')) {
+        msg += ' — Try running without Postgres: from project root run "npm run start" (in-memory mode).';
+      }
+      setError(msg);
     } finally {
       setLoading(false);
     }
+  };
+
+  const loadSample = () => {
+    setName('Demo portfolio');
+    setUseCsv(false);
+    setPositions([
+      { ticker: 'AAPL', qty: 100, price: 185.5 },
+      { ticker: 'MSFT', qty: 50, price: 415 },
+      { ticker: 'JPM', qty: 75, price: 198 },
+    ]);
+    setError(null);
   };
 
   return (
@@ -143,9 +161,21 @@ export function InputView({ onCreated }: InputViewProps) {
         </div>
       )}
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && (
+        <div className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-800" role="alert">
+          {error}
+        </div>
+      )}
 
-      <button
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={loadSample}
+          className="rounded border border-slate-300 bg-white px-3 py-1.5 text-sm text-slate-700 hover:bg-slate-50"
+        >
+          Load sample portfolio
+        </button>
+        <button
         type="button"
         onClick={submit}
         disabled={loading || (useCsv && !csvFile)}
@@ -153,6 +183,7 @@ export function InputView({ onCreated }: InputViewProps) {
       >
         {loading ? 'Creating…' : 'Create portfolio & view results'}
       </button>
+      </div>
     </div>
   );
 }

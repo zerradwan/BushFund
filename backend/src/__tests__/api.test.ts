@@ -12,7 +12,7 @@ jest.mock('../db/client', () => ({
   healthCheck: jest.fn(() => Promise.resolve(true)),
 }));
 
-jest.mock('../db/portfolioRepository', () => ({
+jest.mock('../db/store', () => ({
   createPortfolio: jest.fn(() => Promise.resolve({ id: 1, name: 'Test Portfolio' })),
   getPortfolio: jest.fn((id: number) =>
     Promise.resolve(id === 1 ? { id: 1, name: 'Test Portfolio', created_at: '2026-01-01T00:00:00Z' } : null)
@@ -104,7 +104,7 @@ describe('API', () => {
     });
 
     it('returns 404 for unknown portfolio', async () => {
-      const { getPortfolio } = require('../db/portfolioRepository');
+      const { getPortfolio } = require('../db/store');
       (getPortfolio as jest.Mock).mockResolvedValueOnce(null);
 
       await request(app)

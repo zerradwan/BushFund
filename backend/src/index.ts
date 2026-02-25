@@ -1,7 +1,9 @@
 /**
  * BushFund MVP API server.
- * Config via env: PORT, DATABASE_URL, NODE_ENV.
+ * Config via env: PORT, DATABASE_URL, NODE_ENV, USE_MEMORY_DB.
+ * Loads .env from backend folder so in-memory mode works by default (no Postgres).
  */
+import 'dotenv/config';
 
 import express from 'express';
 import cors from 'cors';
